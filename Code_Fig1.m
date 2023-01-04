@@ -1,5 +1,5 @@
-%%%%%% The following code generates Fig. 1 from Miehl and Gjorgjieva 2021
-
+%%%%%% The following code generates Fig. 1 from Miehl & Gjorgjieva 2022
+%%%%%% PLoS CB. https://doi.org/10.1371/journal.pcbi.1010682
 
 close all
 clear all
@@ -38,16 +38,25 @@ counter=0;
 vec_rhoE=[0:0.01:5]; % vector of E input firing rates in [Hz]
 
 %% Calculate Fig. 1C
-vec_nuI=[0:1:6]; % vector of I firing rates in [Hz]
-for bb2=1:length(vec_nuI)
+ vec_nuI=[0:1:6]; % vector of I firing rates in [Hz]
+% for bb2=1:length(vec_nuI)
+%     for bb=1:length(vec_rhoE) 
+%         
+%         FR_E_loop=max(NE*vec_rhoE(bb)*wEE-vec_nuI(bb2)*wEI,0);
+%         save_dwEE(bb2,bb)=(vec_rhoE(bb)*FR_E_loop*(FR_E_loop-cE))/tau_wEE;
+%         
+%     end
+% end
+
+vec_wEI=[0:0.25:1.5]; % vector of wEI
+for bb2=1:length(vec_wEI)
     for bb=1:length(vec_rhoE) 
-        
-        FR_E_loop=max(NE*vec_rhoE(bb)*wEE-vec_nuI(bb2)*wEI,0);
+        FR_I_loop=rhoI+wIE*vec_rhoE(bb);
+        FR_E_loop=max(NE*vec_rhoE(bb)*wEE-NI*FR_I_loop*vec_wEI(bb2),0);
         save_dwEE(bb2,bb)=(vec_rhoE(bb)*FR_E_loop*(FR_E_loop-cE))/tau_wEE;
         
     end
 end
-
 
 %% Simulation start
 for tt=dt:dt:total_time
@@ -231,4 +240,4 @@ legend('boxoff')
 set(gca,'linewidth',width_of_lines)
 
   
-%print(h1,'Figure_1','-dpdf','-bestfit')
+%print(h1,'Figure_1_V2','-dpdf','-bestfit')

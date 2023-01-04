@@ -1,5 +1,5 @@
-%%%%%% The following code generates Fig. 3A-C from Miehl and Gjorgjieva 2021
-
+%%%%%% The following code generates Fig. 3A-C from Miehl & Gjorgjieva 2022
+%%%%%% PLoS CB. https://doi.org/10.1371/journal.pcbi.1010682
 
 
 close all
@@ -20,7 +20,7 @@ rhoI=0.5; % External E rate onto I neurons in [Hz]
 FR_E=max(NE*rhoE*wEE-NI*rhoI*wEI,0); % E postsynaptic firing rate in [Hz]
 FR_I=rhoI+wIE*rhoE; % I firing rate in [Hz]
 
-shift_c=0.3;
+shift_c=-0.3;
 
 tau_FR_E=10; % Time constant for E neuron rate dynamics in [ms]
 tau_FR_I=10; % Time constant for I neuron rate dynamics in [ms]

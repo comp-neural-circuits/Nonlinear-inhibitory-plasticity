@@ -1,4 +1,4 @@
-%%%%%% The following code generates Fig. 6B,C from Miehl & Gjorgjieva 2022
+%%%%%% The following code generates Fig. 6E,F from Miehl & Gjorgjieva 2022
 %%%%%% PLoS CB. https://doi.org/10.1371/journal.pcbi.1010682
 
 clear all
@@ -19,7 +19,6 @@ rhoI=0.5;  % External E rate onto I neurons in [Hz]
 FR_E=max(NE*rhoE*wEE-NI*rhoI*wEI,0); % E postsynaptic firing rate in [Hz]
 FR_I=rhoI+wIE*rhoE; % I firing rate in [Hz]
 
-
 tau_FR_E=10; % Time constant for E neuron rate dynamics in [ms]
 tau_FR_I=10; % Time constant for I neuron rate dynamics in [ms]
 tau_wEE=1000; % Timescale for E plasticity in [ms]
@@ -38,7 +37,10 @@ start_plot=5000;
 %% Simulation start
 for tt=dt:dt:total_time
     
-    FR_E=FR_E+(-FR_E+0.25*sin(0.01*tt)+max(NE*(rhoE)*wEE-NI*FR_I*wEI,0))/tau_FR_E*dt;
+    
+    rhoE=0.5*sin(0.01*tt)+2;
+
+    FR_E=FR_E+(-FR_E+max(NE*(rhoE)*wEE-NI*FR_I*wEI,0))/tau_FR_E*dt;
     
     FR_I=FR_I+(-FR_I+rhoI+wIE*rhoE)/tau_FR_I*dt;
 
@@ -52,14 +54,13 @@ for tt=dt:dt:total_time
         save_stuff(counter,3)=wEE;
         save_stuff(counter,4)=wEI;
         save_stuff(counter,5)=rhoE;
-    end   
+    end 
 end
 
 
 %% Plot figures
 map = brewermap(3,'Blues');
 map2 = brewermap(3,'Reds');
-
 
 width_of_lines=1;
 size_font=8;
@@ -70,7 +71,6 @@ hold on
 plot([dt:save_timestep:total_time-start_plot]./1000,save_stuff(start_plot+1:end,3),'Color',map(2,:),'LineWidth',width_of_lines)
 plot([dt:save_timestep:total_time-start_plot]./1000,save_stuff(start_plot+1:end,4),'Color',map2(2,:),'LineWidth',width_of_lines)
 hold off
-ylim([0,1])
 XLABEL=xlabel('Time');
 YLABEL=ylabel('w');
 
@@ -85,6 +85,7 @@ YLABEL=ylabel('Postsyn. rate');
 set(gca,'linewidth',width_of_lines)
 
 
+
 subplot(6,3,[2,5])
 
 size_grid=5;
@@ -93,8 +94,8 @@ w2 = linspace(0,size_grid,20);
 
 hold on
 plot(save_stuff(start_plot+1:end,3),save_stuff(start_plot+1:end,4))
-plot([0,size_grid],(NE.*rhoE.*[0,size_grid]-cE+(max(save_stuff(5000:end,1))-cE))./NI./(rhoI+wIE*rhoE),'k','Linewidth',width_of_lines)
-plot([0,size_grid],(NE.*rhoE.*[0,size_grid]-cE+(min(save_stuff(5000:end,1))-cE))./NI./(rhoI+wIE*rhoE),'k','Linewidth',width_of_lines)
+plot([0,size_grid],(NE.*max(save_stuff(:,5)).*[0,size_grid]-cE)./NI./(rhoI+wIE*max(save_stuff(:,5))),'k','Linewidth',width_of_lines)
+plot([0,size_grid],(NE.*min(save_stuff(:,5)).*[0,size_grid]-cE)./NI./(rhoI+wIE*min(save_stuff(:,5))),'k','Linewidth',width_of_lines)
 hold off
 xlim([0,3])
 ylim([0,3])
@@ -105,7 +106,6 @@ set([XLABEL,XLABEL],'FontSize',size_font);
 set(gca,'FontSize',size_font,'FontName','Arial');
 set(gca,'linewidth',width_of_lines)
 
-
 subplot(6,3,[3,6])
 
 size_grid=5;
@@ -114,11 +114,11 @@ w2 = linspace(0,size_grid,20);
 
 hold on
 plot(save_stuff(start_plot+1:end,3),save_stuff(start_plot+1:end,4))
-plot([0,size_grid],(NE.*rhoE.*[0,size_grid]-cE+(max(save_stuff(5000:end,1))-cE))./NI./(rhoI+wIE*rhoE),'k','Linewidth',width_of_lines)
-plot([0,size_grid],(NE.*rhoE.*[0,size_grid]-cE+(min(save_stuff(5000:end,1))-cE))./NI./(rhoI+wIE*rhoE),'k','Linewidth',width_of_lines)
+plot([0,size_grid],(NE.*max(save_stuff(:,5)).*[0,size_grid]-cE)./NI./(rhoI+wIE*max(save_stuff(:,5))),'k','Linewidth',width_of_lines)
+plot([0,size_grid],(NE.*min(save_stuff(:,5)).*[0,size_grid]-cE)./NI./(rhoI+wIE*min(save_stuff(:,5))),'k','Linewidth',width_of_lines)
 hold off
-xlim([0.6,1.3])
-ylim([0.2,0.9])
+xlim([0.9,1.4])
+ylim([0.5,1])
 XLABEL=xlabel('w^{EE}');
 YLABEL=ylabel('w^{EI}');
 set([XLABEL,YLABEL],'FontName','Arial');

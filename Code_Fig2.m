@@ -1,5 +1,5 @@
-%%%%%% The following code generates Fig. 2 from Miehl and Gjorgjieva 2021
-
+%%%%%% The following code generates Fig. 2 from Miehl & Gjorgjieva 2022
+%%%%%% PLoS CB. https://doi.org/10.1371/journal.pcbi.1010682
 
 
 close all
